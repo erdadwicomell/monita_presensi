@@ -1,0 +1,151 @@
+@extends('layouts.app')
+
+@section('title', 'Data Perizinan')
+@section('page-title', 'Data Perizinan')
+
+@section('content')
+
+<div class="max-w-7xl mx-auto space-y-6 sm:space-y-8">
+
+    <!-- HEADER -->
+    <div class="bg-white rounded-3xl shadow-sm p-6 sm:p-8 border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <div class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2">
+                <i class="fa-solid fa-file-signature"></i> Layanan Izin Magang
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-black text-gray-800 tracking-tight">
+                Data Perizinan Saya
+            </h1>
+            <p class="text-gray-400 text-xs sm:text-sm mt-1">
+                Daftar pengajuan izin terlambat, tidak hadir, dan pulang awal beserta status verifikasi instansi.
+            </p>
+        </div>
+
+        <a href="{{ route('perizinan.create') }}"
+           class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-5 py-3 rounded-2xl shadow-md hover:shadow-lg transition-all duration-150 text-xs self-start md:self-auto transform hover:-translate-y-0.5">
+            <i class="fa-solid fa-plus"></i>
+            <span>Ajukan Perizinan Baru</span>
+        </a>
+    </div>
+
+    <!-- TABLE CONTAINER -->
+    <div class="bg-white rounded-3xl shadow-sm overflow-hidden border border-slate-100">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+                <thead class="bg-slate-50/90 text-slate-500 uppercase tracking-wider font-semibold text-[11px] border-b border-slate-100">
+                    <tr>
+                        <th class="px-6 py-4 w-16 text-center">No</th>
+                        <th class="px-6 py-4">Tanggal Izin</th>
+                        <th class="px-6 py-4">Jenis Izin</th>
+                        <th class="px-6 py-4">Jam Izin</th>
+                        <th class="px-6 py-4">Dokumen Bukti</th>
+                        <th class="px-6 py-4">Status Pengajuan</th>
+                        <th class="px-6 py-4 text-center w-28">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    @forelse ($perizinans as $izin)
+                        <tr class="odd:bg-white even:bg-slate-50/40 hover:bg-blue-50/40 transition-colors duration-150">
+                            <td class="px-6 py-4 text-center text-slate-400 font-bold">
+                                {{ $loop->iteration }}
+                            </td>
+                            <td class="px-6 py-4 font-bold text-slate-800 text-sm">
+                                {{ $izin->tanggal->format('d M Y') }}
+                            </td>
+                            <td class="px-6 py-4">
+                                @if($izin->jenis_izin === 'terlambat')
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200/60">
+                                        <i class="fa-solid fa-clock text-[10px]"></i> Terlambat
+                                    </span>
+                                @elseif($izin->jenis_izin === 'tidak_hadir')
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200/60">
+                                        <i class="fa-solid fa-user-xmark text-[10px]"></i> Tidak Hadir
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200/60">
+                                        <i class="fa-solid fa-person-walking-arrow-right text-[10px]"></i> Pulang Awal
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 text-slate-600 font-medium">
+                                @if($izin->jam_mulai_izin)
+                                    <span class="font-mono">{{ substr($izin->jam_mulai_izin, 0, 5) }} - {{ substr($izin->jam_selesai_izin, 0, 5) }} WIB</span>
+                                @else
+                                    <span class="text-slate-400">Seharian</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4">
+                                @if($izin->bukti)
+                                    <a href="{{ asset('storage/' . $izin->bukti) }}" target="_blank" 
+                                       class="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 border border-blue-200/60 px-3 py-1 rounded-xl transition">
+                                        <i class="fa-solid fa-paperclip text-[10px]"></i>
+                                        <span>Lihat Bukti</span>
+                                    </a>
+                                @else
+                                    <span class="text-slate-400">-</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4">
+                                @if($izin->status === 'menunggu')
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200/60">
+                                        <i class="fa-solid fa-hourglass-half text-[10px]"></i> Menunggu
+                                    </span>
+                                @elseif($izin->status === 'disetujui')
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                                        <i class="fa-solid fa-circle-check text-[10px]"></i> Disetujui
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200/60">
+                                        <i class="fa-solid fa-circle-xmark text-[10px]"></i> Ditolak
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="flex items-center justify-center gap-1.5">
+                                    <!-- DETAIL -->
+                                    <a href="{{ route('perizinan.show', $izin->id_perizinan) }}"
+                                       class="text-blue-600 hover:text-blue-800 p-2 rounded-xl hover:bg-blue-50 transition"
+                                       title="Lihat Detail">
+                                        <i class="fa-solid fa-eye text-xs"></i>
+                                    </a>
+
+                                    @if($izin->status === 'menunggu')
+                                        <!-- EDIT -->
+                                        <a href="{{ route('perizinan.edit', $izin->id_perizinan) }}"
+                                           class="text-amber-600 hover:text-amber-800 p-2 rounded-xl hover:bg-amber-50 transition"
+                                           title="Edit Pengajuan">
+                                            <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                        </a>
+
+                                        <!-- BATAL -->
+                                        <form action="{{ route('perizinan.destroy', $izin->id_perizinan) }}"
+                                              method="POST"
+                                              onsubmit="return confirm('Apakah Anda yakin ingin membatalkan perizinan ini?');"
+                                              class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                    class="text-rose-600 hover:text-rose-800 p-2 rounded-xl hover:bg-rose-50 transition cursor-pointer"
+                                                    title="Batalkan Pengajuan">
+                                                <i class="fa-solid fa-trash-can text-xs"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center py-12 text-slate-400">
+                                <i class="fa-solid fa-folder-open text-4xl mb-3 block text-slate-300"></i>
+                                <span class="font-medium text-slate-500">Belum ada riwayat perizinan yang diajukan.</span>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@endsection
