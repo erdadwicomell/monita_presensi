@@ -8,11 +8,8 @@
 <div class="space-y-6">
 
     <!-- HEADER & ACTION BAR -->
-    <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div class="bg-white rounded-3xl shadow-sm p-6 sm:p-8 border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <div class="inline-flex items-center gap-1.5 bg-purple-50 text-purple-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2 border border-purple-100">
-                <i class="fa-solid fa-chalkboard-user"></i> Tim Pembimbing
-            </div>
             <h1 class="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight">
                 Data Pembimbing Instansi
             </h1>
@@ -22,7 +19,7 @@
         </div>
 
         <a href="{{ route('admin.pembimbing.create') }}"
-           class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs px-5 py-3 rounded-2xl shadow-sm hover:shadow-md transition-all duration-150 transform hover:-translate-y-0.5 self-start sm:self-auto cursor-pointer">
+           class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-sm shadow-purple-200 rounded-xl px-5 py-2.5 font-semibold text-sm transition-all transform hover:-translate-y-0.5 self-start sm:self-auto cursor-pointer">
             <i class="fa-solid fa-plus text-xs"></i>
             <span>Tambah Pembimbing</span>
         </a>
@@ -37,47 +34,68 @@
         </div>
     @endif
 
-    <!-- TABLE CARD -->
-    <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+    <!-- DATA TABLE CONTAINER (PREMIUM ENTERPRISE UI) -->
+    <div class="bg-white rounded-2xl shadow-md shadow-slate-100/80 border border-slate-100/50 p-5">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs">
-                <thead class="bg-slate-50/90 text-slate-500 uppercase tracking-wider font-semibold text-[11px] border-b border-slate-100">
-                    <tr>
-                        <th class="px-6 py-4 w-16 text-center">No</th>
-                        <th class="px-6 py-4">Nama Pembimbing</th>
-                        <th class="px-6 py-4">NIP & Jabatan</th>
-                        <th class="px-6 py-4">Kontak</th>
-                        <th class="px-6 py-4">Peserta Bimbingan</th>
-                        <th class="px-6 py-4 text-center">Status Akun</th>
-                        <th class="px-6 py-4 text-center w-28">Aksi</th>
+                <!-- THEAD (HEADER TABEL RESMI) -->
+                <thead>
+                    <tr class="bg-slate-50/80 text-slate-500 font-semibold text-xs tracking-wider uppercase border-b border-slate-100">
+                        <th class="py-4 px-6 w-16 text-center">No</th>
+                        <th class="py-4 px-6">Nama Pembimbing</th>
+                        <th class="py-4 px-6">NIP & Jabatan</th>
+                        <th class="py-4 px-6">Kontak</th>
+                        <th class="py-4 px-6">Peserta Bimbingan</th>
+                        <th class="py-4 px-6 text-center">Status Akun</th>
+                        <th class="py-4 px-6 text-center w-28">Aksi</th>
                     </tr>
                 </thead>
 
+                <!-- TBODY & TR (ZEBRA STRIPING + HOVER LEMBUT) -->
                 <tbody class="divide-y divide-slate-100">
                     @forelse($pembimbings as $index => $p)
-                        <tr class="odd:bg-white even:bg-slate-50/40 hover:bg-blue-50/40 transition-colors duration-150">
-                            <td class="px-6 py-4 text-center text-slate-400 font-bold">
+                        <tr class="odd:bg-white even:bg-slate-50/30 hover:bg-blue-50/40 transition-colors duration-150">
+                            <!-- NO -->
+                            <td class="py-4 px-6 text-center text-slate-400 font-bold">
                                 {{ $pembimbings->firstItem() + $index }}
                             </td>
 
-                            <td class="px-6 py-4">
+                            <!-- NAMA PEMBIMBING -->
+                            <td class="py-4 px-6">
                                 <span class="font-bold text-slate-800 text-sm block">{{ $p->name }}</span>
                                 @if(!empty($p->alamat))
-                                    <span class="text-slate-400 text-[11px] font-normal mt-0.5 block truncate max-w-xs">{{ $p->alamat }}</span>
+                                    <span class="text-slate-400 text-xs font-normal mt-0.5 block max-w-[200px] truncate" title="{{ $p->alamat }}">
+                                        {{ $p->alamat }}
+                                    </span>
                                 @endif
                             </td>
 
-                            <td class="px-6 py-4">
-                                <div class="font-semibold text-slate-700">NIP: {{ $p->nip ?? '-' }}</div>
-                                <div class="text-purple-600 font-medium text-[11px] mt-0.5">{{ $p->jabatan ?? '-' }}</div>
+                            <!-- NIP & JABATAN -->
+                            <td class="py-4 px-6">
+                                <div class="text-sm font-medium text-slate-800 font-mono">
+                                    {{ trim(preg_replace('/^nip[\.:\s]*/i', '', $p->nip ?? '')) ?: ($p->nip ?? '-') }}
+                                </div>
+                                <div class="text-xs text-slate-500 mt-0.5">
+                                    {{ $p->jabatan ?? '-' }}
+                                </div>
                             </td>
 
-                            <td class="px-6 py-4 text-slate-600">
-                                <div><i class="fa-solid fa-envelope text-slate-400 mr-1 text-[10px]"></i> {{ $p->email }}</div>
-                                <div class="mt-0.5 text-slate-500"><i class="fa-solid fa-phone text-slate-400 mr-1 text-[10px]"></i> {{ $p->nomor_telepon ?? $p->no_hp ?? '-' }}</div>
+                            <!-- KONTAK -->
+                            <td class="py-4 px-6 text-slate-600">
+                                <div class="flex flex-col gap-1.5">
+                                    <div class="flex items-center gap-1.5 text-xs text-slate-600">
+                                        <i class="fa-solid fa-envelope text-slate-400 text-[11px] w-3.5"></i>
+                                        <span>{{ $p->email }}</span>
+                                    </div>
+                                    <div class="flex items-center gap-1.5 text-xs text-slate-500">
+                                        <i class="fa-solid fa-phone text-slate-400 text-[11px] w-3.5"></i>
+                                        <span>{{ $p->nomor_telepon ?? $p->no_hp ?? '-' }}</span>
+                                    </div>
+                                </div>
                             </td>
 
-                            <td class="px-6 py-4">
+                            <!-- PESERTA BIMBINGAN -->
+                            <td class="py-4 px-6">
                                 @if($p->pesertaBimbingan->count() > 0)
                                     <div class="flex flex-wrap gap-1.5 max-w-xs">
                                         @foreach($p->pesertaBimbingan as $pb)
@@ -91,7 +109,8 @@
                                 @endif
                             </td>
 
-                            <td class="px-6 py-4 text-center">
+                            <!-- STATUS AKUN -->
+                            <td class="py-4 px-6 text-center">
                                 @if($p->is_active)
                                     <span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200/60 px-3 py-1 rounded-full text-xs font-semibold">
                                         <i class="fa-solid fa-circle-check text-[9px]"></i> Aktif
@@ -103,7 +122,8 @@
                                 @endif
                             </td>
 
-                            <td class="px-6 py-4 text-center">
+                            <!-- AKSI -->
+                            <td class="py-4 px-6 text-center">
                                 <div class="flex items-center justify-center gap-2">
                                     <a href="{{ route('admin.pembimbing.edit', $p->id) }}"
                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded-xl transition"
@@ -138,7 +158,7 @@
         </div>
 
         @if($pembimbings->hasPages())
-            <div class="p-6 border-t border-slate-100 bg-slate-50/50">
+            <div class="p-6 border-t border-slate-100 bg-slate-50/50 mt-4 rounded-b-xl">
                 {{ $pembimbings->links() }}
             </div>
         @endif

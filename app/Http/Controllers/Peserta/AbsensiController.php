@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Absensi;
 use App\Models\Perizinan;
+use App\Models\Notifikasi;
+use App\Models\User;
 
 class AbsensiController extends Controller
 {
@@ -361,6 +363,27 @@ class AbsensiController extends Controller
             'foto'           => $fotoPath,
             'hmac_signature' => $signature,
         ]);
+
+        // =====================================================================
+        // 9. NOTIFIKASI OTOMATIS KE ADMIN INSTANSI
+        // =====================================================================
+        $tipeLabel = ucfirst($request->tipe_absensi);
+        $jamFormat = \Carbon\Carbon::parse($jamSekarang)->format('H:i');
+        $pesanNotif = "{$user->name} baru saja melakukan presensi {$tipeLabel} pada pukul {$jamFormat}.";
+
+        $admins = User::where('instansi_id', $user->instansi_id)
+            ->where('role', 'admin_instansi')
+            ->get();
+
+        foreach ($admins as $admin) {
+            Notifikasi::kirim(
+                $admin->id,
+                "Presensi {$tipeLabel} Peserta",
+                $pesanNotif,
+                route('rekap.absensi'),
+                'info'
+            );
+        }
 
         $keterangan = $idPerizinan ? 'Telat (Dengan Izin Terlambat)' : ucfirst($statusKehadiran);
 

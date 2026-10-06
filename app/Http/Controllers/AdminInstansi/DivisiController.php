@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Divisi;
+use App\Models\User;
 
 class DivisiController extends Controller
 {
@@ -18,11 +19,12 @@ class DivisiController extends Controller
     public function index()
     {
         $divisis = Divisi::where(
-
             'instansi_id',
             auth()->user()->instansi_id
-
-        )->latest()->get();
+        )
+        ->with(['kepalaDivisi', 'pesertas'])
+        ->latest()
+        ->get();
 
         return view('admin_instansi.divisi.index', compact('divisis'));
     }
@@ -35,7 +37,12 @@ class DivisiController extends Controller
 
     public function create()
     {
-        return view('admin_instansi.divisi.create');
+        $pembimbings = User::where('instansi_id', auth()->user()->instansi_id)
+            ->where('role', 'pembimbing_instansi')
+            ->orderBy('name')
+            ->get();
+
+        return view('admin_instansi.divisi.create', compact('pembimbings'));
     }
 
     /*
@@ -46,23 +53,30 @@ class DivisiController extends Controller
 
     public function store(Request $request)
     {
+        $instansiId = auth()->user()->instansi_id;
+
         $request->validate([
-
-            'nama_divisi' => 'required'
-
+            'nama_divisi'      => 'required|string|max:255',
+            'kode_divisi'      => 'required|string|max:10',
+            'kepala_divisi'    => 'nullable|string|max:255',
+            'kepala_divisi_id' => 'nullable|exists:users,id',
+            'lokasi_ruangan'   => 'nullable|string|max:100',
+            'kuota_maksimal'   => 'required|integer|min:1|max:100',
+            'deskripsi'        => 'nullable|string',
         ]);
 
         Divisi::create([
-
-            'instansi_id' => auth()->user()->instansi_id,
-
-            'nama_divisi' => $request->nama_divisi,
-
-            'deskripsi' => $request->deskripsi
-
+            'instansi_id'      => $instansiId,
+            'nama_divisi'      => $request->nama_divisi,
+            'kode_divisi'      => strtoupper(trim($request->kode_divisi)),
+            'kepala_divisi'    => $request->kepala_divisi,
+            'kepala_divisi_id' => $request->kepala_divisi_id,
+            'lokasi_ruangan'   => $request->lokasi_ruangan,
+            'kuota_maksimal'   => $request->kuota_maksimal ?? 5,
+            'deskripsi'        => $request->deskripsi,
         ]);
 
-        return redirect('/divisi')
+        return redirect()->route('divisi.index')
             ->with('success', 'Divisi berhasil dibuat');
     }
 
@@ -74,9 +88,15 @@ class DivisiController extends Controller
 
     public function edit(string $id)
     {
-        $divisi = Divisi::findOrFail($id);
+        $divisi = Divisi::where('instansi_id', auth()->user()->instansi_id)
+            ->findOrFail($id);
 
-        return view('admin_instansi.divisi.edit', compact('divisi'));
+        $pembimbings = User::where('instansi_id', auth()->user()->instansi_id)
+            ->where('role', 'pembimbing_instansi')
+            ->orderBy('name')
+            ->get();
+
+        return view('admin_instansi.divisi.edit', compact('divisi', 'pembimbings'));
     }
 
     /*
@@ -87,17 +107,30 @@ class DivisiController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $divisi = Divisi::findOrFail($id);
+        $divisi = Divisi::where('instansi_id', auth()->user()->instansi_id)
+            ->findOrFail($id);
 
-        $divisi->update([
-
-            'nama_divisi' => $request->nama_divisi,
-
-            'deskripsi' => $request->deskripsi
-
+        $request->validate([
+            'nama_divisi'      => 'required|string|max:255',
+            'kode_divisi'      => 'required|string|max:10',
+            'kepala_divisi'    => 'nullable|string|max:255',
+            'kepala_divisi_id' => 'nullable|exists:users,id',
+            'lokasi_ruangan'   => 'nullable|string|max:100',
+            'kuota_maksimal'   => 'required|integer|min:1|max:100',
+            'deskripsi'        => 'nullable|string',
         ]);
 
-        return redirect('/divisi')
+        $divisi->update([
+            'nama_divisi'      => $request->nama_divisi,
+            'kode_divisi'      => strtoupper(trim($request->kode_divisi)),
+            'kepala_divisi'    => $request->kepala_divisi,
+            'kepala_divisi_id' => $request->kepala_divisi_id,
+            'lokasi_ruangan'   => $request->lokasi_ruangan,
+            'kuota_maksimal'   => $request->kuota_maksimal ?? 5,
+            'deskripsi'        => $request->deskripsi,
+        ]);
+
+        return redirect()->route('divisi.index')
             ->with('success', 'Divisi berhasil diupdate');
     }
 

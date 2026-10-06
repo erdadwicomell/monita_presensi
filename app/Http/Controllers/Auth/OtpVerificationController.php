@@ -95,12 +95,16 @@ class OtpVerificationController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        Otp::generate($request->email, $request->type, $user ? $user->id : null);
+        $otp = Otp::generate($request->email, $request->type, $user ? $user->id : null);
 
         session([
             'otp_email' => $request->email,
             'otp_type'  => $request->type,
         ]);
+
+        if (isset($otp->mail_sent) && !$otp->mail_sent) {
+            return back()->with('info', "Koneksi email SMTP diblokir oleh firewall jaringan WiFi ini. Kode OTP baru Anda: [ {$otp->otp_code} ].");
+        }
 
         return back()->with('info', "Kode OTP baru telah dikirimkan ke alamat email {$request->email}. Silakan periksa Kotak Masuk atau folder Spam Anda.");
     }

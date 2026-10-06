@@ -84,8 +84,13 @@ class AdminPembimbingController extends Controller
         // Generate OTP Aktivasi
         $otp = Otp::generate($pembimbing->email, 'aktivasi_pembimbing', $pembimbing->id);
 
+        $msg = "Pembimbing Instansi {$pembimbing->name} berhasil didaftarkan! Kode OTP Aktivasi: {$otp->otp_code}.";
+        if (isset($otp->mail_sent) && !$otp->mail_sent) {
+            $msg .= " (Catatan: Pengiriman email terhambat firewall jaringan).";
+        }
+
         return redirect()->route('admin.pembimbing.index')
-            ->with('success', "Pembimbing Instansi {$pembimbing->name} berhasil didaftarkan! Kode OTP Aktivasi: {$otp->otp_code}.");
+            ->with('success', $msg);
     }
 
     /**

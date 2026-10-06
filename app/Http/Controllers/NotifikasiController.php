@@ -29,20 +29,23 @@ class NotifikasiController extends Controller
             ->get()
             ->map(function ($item) {
                 return [
-                    'id'         => $item->id,
-                    'judul'      => $item->judul,
-                    'pesan'      => $item->pesan,
-                    'link'       => $item->link,
-                    'tipe'       => $item->tipe,
-                    'is_read'    => $item->is_read,
-                    'time_ago'   => $item->created_at->diffForHumans(),
-                    'created_at' => $item->created_at->format('d M Y H:i'),
+                    'id'               => $item->id,
+                    'judul'            => $item->judul,
+                    'pesan'            => $item->pesan,
+                    'link'             => $item->link,
+                    'url_terkait'      => $item->link,
+                    'tipe'             => $item->tipe,
+                    'is_read'          => $item->is_read,
+                    'time_ago'         => $item->created_at->diffForHumans(),
+                    'created_at_human' => $item->created_at->diffForHumans(),
+                    'created_at'       => $item->created_at->format('d M Y H:i'),
                 ];
             });
 
         return response()->json([
             'unread_count'  => $unreadCount,
             'notifications' => $notifications,
+            'notifikasi'    => $notifications,
         ]);
     }
 

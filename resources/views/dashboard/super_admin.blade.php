@@ -45,7 +45,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
         
         <!-- 1. Total Instansi -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between hover:border-blue-200 transition">
+        <a href="{{ route('instansi.index') }}" class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between hover:border-blue-200 cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-200">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Instansi</span>
                 <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg">
@@ -60,10 +60,10 @@
                     <span class="text-amber-600 font-semibold">{{ $totalLapangan }}</span> Lap
                 </p>
             </div>
-        </div>
+        </a>
 
         <!-- 2. Total Pengguna Global -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between hover:border-indigo-200 transition">
+        <a href="{{ route('users.index') }}" class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between hover:border-indigo-200 cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-200">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Total User</span>
                 <div class="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg">
@@ -78,10 +78,10 @@
                     <strong class="text-emerald-600">{{ $totalPeserta }}</strong> Peserta
                 </p>
             </div>
-        </div>
+        </a>
 
         <!-- 3. Presensi Hari Ini -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between hover:border-emerald-200 transition">
+        <a href="{{ route('rekap.absensi') }}" class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between hover:border-emerald-200 cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-200">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Presensi Hari Ini</span>
                 <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
@@ -95,10 +95,10 @@
                     <span class="text-amber-600 font-semibold">{{ $telatHariIni }} Telat</span>
                 </p>
             </div>
-        </div>
+        </a>
 
         <!-- 4. Laporan Kegiatan -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between hover:border-purple-200 transition">
+        <a href="{{ route('admin.laporan.index') }}" class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between hover:border-purple-200 cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-200">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Laporan Magang</span>
                 <div class="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg">
@@ -111,10 +111,10 @@
                     <span class="text-amber-600 font-semibold">{{ $laporanPending }} Menunggu Validasi</span>
                 </p>
             </div>
-        </div>
+        </a>
 
         <!-- 5. Audit Keamanan & Spoofing -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between hover:border-rose-200 transition">
+        <a href="{{ route('admin.audit.log') }}" class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between hover:border-rose-200 cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-200">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Audit Keamanan</span>
                 <div class="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-lg">
@@ -127,7 +127,7 @@
                     <span class="text-rose-500 font-semibold">{{ $anomaliHariIni }} Insiden Hari Ini</span>
                 </p>
             </div>
-        </div>
+        </a>
 
     </div>
 

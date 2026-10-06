@@ -63,6 +63,26 @@ class User extends Authenticatable
         return null;
     }
 
+    public function getNimAttribute($value)
+    {
+        return $value ?: ($this->attributes['nim_nisn'] ?? null);
+    }
+
+    public function getNimNisnAttribute($value)
+    {
+        return $value ?: ($this->attributes['nim'] ?? null);
+    }
+
+    public function getNoHpAttribute($value)
+    {
+        return $value ?: ($this->attributes['nomor_telepon'] ?? null);
+    }
+
+    public function getNomorTeleponAttribute($value)
+    {
+        return $value ?: ($this->attributes['no_hp'] ?? null);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | HIDDEN

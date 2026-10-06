@@ -22,33 +22,33 @@
     </div>
 
     <!-- STATISTIC CARDS -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center justify-between">
+    <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 h-auto shadow-sm border border-gray-100 flex items-center justify-between">
             <div>
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Menunggu Validasi</p>
-                <h3 class="text-3xl font-black text-amber-600 mt-1">{{ $totalMenunggu }}</h3>
+                <p class="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">Menunggu Validasi</p>
+                <h3 class="text-2xl sm:text-3xl font-bold text-amber-600 mt-0.5">{{ $totalMenunggu }}</h3>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-base flex-shrink-0">
                 <i class="fa-solid fa-clock"></i>
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center justify-between">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 h-auto shadow-sm border border-gray-100 flex items-center justify-between">
             <div>
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Laporan Disetujui</p>
-                <h3 class="text-3xl font-black text-emerald-600 mt-1">{{ $totalDisetujui }}</h3>
+                <p class="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">Laporan Disetujui</p>
+                <h3 class="text-2xl sm:text-3xl font-bold text-emerald-600 mt-0.5">{{ $totalDisetujui }}</h3>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-base flex-shrink-0">
                 <i class="fa-solid fa-circle-check"></i>
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center justify-between">
+        <div class="col-span-2 lg:col-span-1 bg-white rounded-2xl p-4 sm:p-5 h-auto shadow-sm border border-gray-100 flex items-center justify-between">
             <div>
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Perlu Perbaikan</p>
-                <h3 class="text-3xl font-black text-rose-600 mt-1">{{ $totalRevisi }}</h3>
+                <p class="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">Perlu Perbaikan</p>
+                <h3 class="text-2xl sm:text-3xl font-bold text-rose-600 mt-0.5">{{ $totalRevisi }}</h3>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl">
+            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-base flex-shrink-0">
                 <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
         </div>

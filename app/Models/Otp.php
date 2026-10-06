@@ -49,10 +49,13 @@ class Otp extends Model
         ]);
 
         // Kirimkan email OTP ke alamat email penerima
+        $otp->mail_sent = true;
         try {
             \Illuminate\Support\Facades\Mail::to($email)->send(new \App\Mail\SendOtpMail($email, $otpCode, $tipe));
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::error("Gagal mengirim email OTP ke {$email}: " . $e->getMessage());
+            $otp->mail_sent = false;
+            $otp->mail_error = $e->getMessage();
+            \Illuminate\Support\Facades\Log::warning("Gagal mengirim email OTP ke {$email} (Firewall/Timeout): " . $e->getMessage());
         }
 
         return $otp;

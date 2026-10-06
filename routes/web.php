@@ -44,6 +44,7 @@ use App\Http\Controllers\Auth\OtpVerificationController;
 |--------------------------------------------------------------------------
 */
 use App\Http\Controllers\PembimbingInstansi\PembimbingDashboardController;
+use App\Http\Controllers\PembimbingInstansi\PembimbingPresensiController;
 use App\Http\Controllers\PembimbingInstansi\PembimbingLaporanController;
 
 /*
@@ -245,11 +246,14 @@ Route::middleware(['auth'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | PEMBIMBING INSTANSI WORKFLOW (DASHBOARD & VALIDASI LAPORAN BIMBINGAN)
+    | PEMBIMBING INSTANSI WORKFLOW (DASHBOARD, REKAP PRESENSI & VALIDASI LAPORAN)
     |--------------------------------------------------------------------------
     */
     Route::get('/Pembimbing/dashboard', [PembimbingDashboardController::class, 'index'])
         ->name('pembimbing.dashboard');
+
+    Route::get('/Pembimbing/presensi', [PembimbingPresensiController::class, 'index'])
+        ->name('pembimbing.presensi.index');
 
     Route::get('/Pembimbing/laporan', [PembimbingLaporanController::class, 'index'])
         ->name('pembimbing.laporan.index');

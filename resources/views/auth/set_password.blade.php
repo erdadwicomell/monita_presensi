@@ -60,15 +60,22 @@
                     Password Baru <span class="text-rose-500">*</span>
                 </label>
                 <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 text-sm">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 text-sm pointer-events-none">
                         <i class="fa-solid fa-lock"></i>
                     </span>
                     <input type="password"
                            name="password"
+                           id="passwordInput"
                            required
                            autofocus
                            placeholder="Minimal 8 karakter"
-                           class="w-full bg-white border border-slate-200 text-slate-800 placeholder:text-slate-400 text-xs rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition shadow-2xs">
+                           class="w-full bg-white border border-slate-200 text-slate-800 placeholder:text-slate-400 text-xs rounded-xl pl-10 pr-10 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition shadow-2xs">
+                    <button type="button"
+                            id="btnTogglePassword"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer transition p-1"
+                            aria-label="Tampilkan atau sembunyikan password baru">
+                        <i class="fa-solid fa-eye text-sm" id="iconPassword"></i>
+                    </button>
                 </div>
             </div>
 
@@ -78,14 +85,21 @@
                     Ulangi Password Baru <span class="text-rose-500">*</span>
                 </label>
                 <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 text-sm">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 text-sm pointer-events-none">
                         <i class="fa-solid fa-shield-halved"></i>
                     </span>
                     <input type="password"
                            name="password_confirmation"
+                           id="passwordConfirmationInput"
                            required
                            placeholder="Ketik ulang password baru"
-                           class="w-full bg-white border border-slate-200 text-slate-800 placeholder:text-slate-400 text-xs rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition shadow-2xs">
+                           class="w-full bg-white border border-slate-200 text-slate-800 placeholder:text-slate-400 text-xs rounded-xl pl-10 pr-10 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition shadow-2xs">
+                    <button type="button"
+                            id="btnTogglePasswordConfirmation"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer transition p-1"
+                            aria-label="Tampilkan atau sembunyikan konfirmasi password">
+                        <i class="fa-solid fa-eye text-sm" id="iconPasswordConfirmation"></i>
+                    </button>
                 </div>
             </div>
 
@@ -97,6 +111,37 @@
         </form>
 
     </div>
+
+    <!-- SKRIP TOGGLE SHOW/HIDE PASSWORD -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function initPasswordToggle(btnId, inputId, iconId) {
+            const btn = document.getElementById(btnId);
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+
+            if (btn && input && icon) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const isPassword = input.type === 'password';
+                    
+                    input.type = isPassword ? 'text' : 'password';
+
+                    if (isPassword) {
+                        icon.classList.remove('fa-eye', 'text-slate-400');
+                        icon.classList.add('fa-eye-slash', 'text-emerald-600');
+                    } else {
+                        icon.classList.remove('fa-eye-slash', 'text-emerald-600');
+                        icon.classList.add('fa-eye', 'text-slate-400');
+                    }
+                });
+            }
+        }
+
+        initPasswordToggle('btnTogglePassword', 'passwordInput', 'iconPassword');
+        initPasswordToggle('btnTogglePasswordConfirmation', 'passwordConfirmationInput', 'iconPasswordConfirmation');
+    });
+    </script>
 
 </body>
 </html>

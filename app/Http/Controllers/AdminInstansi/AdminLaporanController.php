@@ -96,11 +96,13 @@ class AdminLaporanController extends Controller
             'diverifikasi_pada' => now(),
         ]);
 
+        $tgl = \Carbon\Carbon::parse($laporan->tanggal)->format('Y-m-d');
+
         // Notifikasi ke peserta
         \App\Models\Notifikasi::kirim(
             $laporan->user_id,
             'Laporan Kegiatan Disetujui',
-            'Laporan kegiatan Anda untuk tanggal ' . $laporan->tanggal . ' telah disetujui oleh Pembimbing Instansi.',
+            "Laporan kegiatan Anda tanggal {$tgl} berstatus: Disetujui.",
             route('laporan.show', $laporan->id),
             'success'
         );
@@ -141,11 +143,13 @@ class AdminLaporanController extends Controller
             'diverifikasi_pada' => now(),
         ]);
 
+        $tgl = \Carbon\Carbon::parse($laporan->tanggal)->format('Y-m-d');
+
         // Notifikasi ke peserta
         \App\Models\Notifikasi::kirim(
             $laporan->user_id,
             'Laporan Perlu Revisi',
-            'Laporan kegiatan tanggal ' . $laporan->tanggal . ' memerlukan perbaikan: ' . $request->catatan_revisi,
+            "Laporan kegiatan Anda tanggal {$tgl} berstatus: Perlu Revisi.",
             route('laporan.edit', $laporan->id),
             'warning'
         );

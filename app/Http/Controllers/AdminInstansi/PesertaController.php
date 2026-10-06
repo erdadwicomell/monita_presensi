@@ -29,6 +29,7 @@ class PesertaController extends Controller
                 'instansi_id',
                 auth()->user()->instansi_id
             )
+            ->with(['divisi', 'teknisi', 'pembimbing'])
             ->latest()
             ->get();
 
@@ -86,12 +87,24 @@ class PesertaController extends Controller
         $rules = [
             'name'            => 'required|string|max:255',
             'asal_sekolah_pt' => 'required|string|max:255',
-            'nim_nisn'        => 'required|string|max:50',
             'email'           => 'required|email|unique:users,email',
-            'nomor_telepon'   => 'required|string|max:25',
             'alamat'          => 'required|string',
             'pembimbing_id'   => 'required|exists:users,id',
         ];
+
+        // Mendukung input 'nim' maupun 'nim_nisn'
+        if ($request->has('nim')) {
+            $rules['nim'] = 'required|string|max:50';
+        } else {
+            $rules['nim_nisn'] = 'required|string|max:50';
+        }
+
+        // Mendukung input 'nomor_telepon' maupun 'no_hp'
+        if ($request->has('no_hp')) {
+            $rules['no_hp'] = 'required|string|max:25';
+        } else {
+            $rules['nomor_telepon'] = 'required|string|max:25';
+        }
 
         if ($instansi && in_array($instansi->jenis_instansi, ['kantor', 'pemerintahan'])) {
             $rules['divisi_id'] = 'required|exists:divisis,id';
@@ -109,10 +122,14 @@ class PesertaController extends Controller
         // Otomatisasi tipe penempatan sesuai jenis instansi
         $tipePenempatan = ($instansi && $instansi->jenis_instansi === 'lapangan') ? 'lapangan' : 'kantor';
 
+        $nim = $request->nim ?? $request->nim_nisn;
+        $noHp = $request->no_hp ?? $request->nomor_telepon;
+
         $peserta = User::create([
             'name'            => $request->name,
             'asal_sekolah_pt' => $request->asal_sekolah_pt,
-            'nim_nisn'        => $request->nim_nisn,
+            'nim'             => $nim,
+            'nim_nisn'        => $nim,
             'email'           => $request->email,
             'password'        => Hash::make($tempPassword),
             'role'            => 'peserta',
@@ -121,7 +138,8 @@ class PesertaController extends Controller
             'divisi_id'       => $request->divisi_id,
             'teknisi_id'      => $request->teknisi_id,
             'pembimbing_id'   => $request->pembimbing_id,
-            'nomor_telepon'   => $request->nomor_telepon,
+            'nomor_telepon'   => $noHp,
+            'no_hp'           => $noHp,
             'alamat'          => $request->alamat,
             'is_active'       => false,
         ]);
@@ -142,7 +160,16 @@ class PesertaController extends Controller
         }
 
         // Generate OTP Aktivasi untuk Peserta
-        \App\Models\Otp::generate($peserta->email, 'aktivasi_peserta', $peserta->id);
+        $otp = \App\Models\Otp::generate($peserta->email, 'aktivasi_peserta', $peserta->id);
+
+        if (isset($otp->mail_sent) && !$otp->mail_sent) {
+            return redirect()
+                ->route('peserta.index')
+                ->with(
+                    'warning',
+                    "Akun Peserta Magang {$peserta->name} berhasil didaftarkan. Namun koneksi email SMTP terhambat firewall jaringan. Kode OTP Aktivasi: [ {$otp->otp_code} ]."
+                );
+        }
 
         return redirect()
             ->route('peserta.index')
@@ -208,24 +235,20 @@ class PesertaController extends Controller
             ->where('id', $id)
             ->firstOrFail();
 
+        $nim = $request->nim ?? $request->nim_nisn;
+        $noHp = $request->no_hp ?? $request->nomor_telepon;
+
         $peserta->update([
-
             'name'          => $request->name,
-
             'email'         => $request->email,
-
             'divisi_id'     => $request->divisi_id,
-
             'teknisi_id'    => $request->teknisi_id,
-
             'pembimbing_id' => $request->pembimbing_id,
-
-            'nim'           => $request->nim,
-
-            'no_hp'         => $request->no_hp,
-
+            'nim'           => $nim,
+            'nim_nisn'      => $nim,
+            'no_hp'         => $noHp,
+            'nomor_telepon' => $noHp,
             'alamat'        => $request->alamat,
-
         ]);
 
         if ($request->pembimbing_id) {

@@ -74,8 +74,8 @@
                     NISN / NIM Peserta <span class="text-rose-500">*</span>
                 </label>
                 <input type="text"
-                       name="nim_nisn"
-                       value="{{ old('nim_nisn') }}"
+                       name="nim"
+                       value="{{ old('nim', old('nim_nisn')) }}"
                        class="w-full border border-gray-200 rounded-2xl px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
                        placeholder="Contoh: 210101102 / 0054321987"
                        required>

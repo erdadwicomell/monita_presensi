@@ -96,4 +96,20 @@ class ProfileTest extends TestCase
         $this->assertNotNull($user->fresh()->foto_profil);
         \Illuminate\Support\Facades\Storage::disk('public')->assertExists($user->fresh()->foto_profil);
     }
+
+    public function test_profile_photo_is_preserved_when_updating_without_new_photo(): void
+    {
+        $user = User::factory()->create([
+            'foto_profil' => 'avatars/existing_avatar.jpg',
+        ]);
+
+        $response = $this->actingAs($user)->patch('/profile', [
+            'name'  => 'Updated Name',
+            'email' => $user->email,
+        ]);
+
+        $response->assertSessionHasNoErrors()->assertRedirect('/profile');
+        $this->assertSame('Updated Name', $user->fresh()->name);
+        $this->assertSame('avatars/existing_avatar.jpg', $user->fresh()->foto_profil);
+    }
 }

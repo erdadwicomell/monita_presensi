@@ -25,10 +25,11 @@
         </div>
     </div>
 
-    <!-- STATISTIC CARDS -->
+    <!-- STATISTIC CARDS (CLICKABLE) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <!-- Total Peserta Bimbingan -->
-        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center justify-between">
+        <a href="#daftar-peserta"
+           class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center justify-between cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Peserta Bimbingan</p>
                 <h3 class="text-3xl font-black text-gray-800 mt-1">{{ $totalPesertaBimbingan }}</h3>
@@ -37,10 +38,11 @@
             <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl">
                 <i class="fa-solid fa-users"></i>
             </div>
-        </div>
+        </a>
 
         <!-- Hadir Hari Ini -->
-        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center justify-between">
+        <a href="{{ route('pembimbing.presensi.index', ['status' => 'hadir']) }}"
+           class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center justify-between cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Hadir Hari Ini</p>
                 <h3 class="text-3xl font-black text-emerald-600 mt-1">{{ $hadirHariIni }}</h3>
@@ -49,10 +51,11 @@
             <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
                 <i class="fa-solid fa-circle-check"></i>
             </div>
-        </div>
+        </a>
 
         <!-- Terlambat Hari Ini -->
-        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center justify-between">
+        <a href="{{ route('pembimbing.presensi.index', ['status' => 'telat']) }}"
+           class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center justify-between cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Terlambat Hari Ini</p>
                 <h3 class="text-3xl font-black text-amber-600 mt-1">{{ $telatHariIni }}</h3>
@@ -61,10 +64,11 @@
             <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
                 <i class="fa-solid fa-clock"></i>
             </div>
-        </div>
+        </a>
 
         <!-- Laporan Menunggu Bimbingan -->
-        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center justify-between">
+        <a href="{{ route('pembimbing.laporan.index', ['status' => 'menunggu']) }}"
+           class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center justify-between cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Perlu Validasi</p>
                 <h3 class="text-3xl font-black text-rose-600 mt-1">{{ $laporanPending }}</h3>
@@ -73,14 +77,14 @@
             <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl">
                 <i class="fa-solid fa-book-bookmark"></i>
             </div>
-        </div>
+        </a>
     </div>
 
     <!-- GRID CONTENT: DAFTAR PESERTA & LAPORAN TERAKHIR -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         <!-- DAFTAR PESERTA BIMBINGAN -->
-        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
+        <div id="daftar-peserta" class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 scroll-mt-24">
             <div class="flex items-center justify-between mb-4">
                 <div>
                     <h3 class="font-bold text-gray-800 text-sm">Peserta Magang Bimbingan Anda</h3>

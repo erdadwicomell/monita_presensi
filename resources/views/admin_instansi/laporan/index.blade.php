@@ -7,37 +7,42 @@
 
 <div class="space-y-6">
 
-    <!-- STATISTIC CARDS -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div class="bg-white p-6 rounded-2xl shadow border-l-4 border-yellow-500 flex items-center justify-between">
+    <!-- STATISTIC CARDS (MINIMALIS & RESPONSIF) -->
+    <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+
+        <!-- 1. MENUNGGU EVALUASI -->
+        <div class="bg-white p-4 sm:p-5 h-auto rounded-2xl shadow-sm border border-slate-100 border-l-4 border-l-yellow-500 flex items-center justify-between">
             <div>
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Menunggu Evaluasi</p>
-                <h2 class="text-3xl font-bold text-gray-800 mt-1">{{ $totalMenunggu }}</h2>
+                <p class="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">Menunggu Evaluasi</p>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-800 mt-0.5">{{ $totalMenunggu }}</h2>
             </div>
-            <div class="w-12 h-12 rounded-xl bg-yellow-100 flex items-center justify-center text-yellow-600 text-xl font-bold">
+            <div class="w-10 h-10 rounded-xl bg-yellow-50 text-yellow-600 flex items-center justify-center text-base flex-shrink-0">
                 <i class="fa-solid fa-hourglass-half"></i>
             </div>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl shadow border-l-4 border-emerald-500 flex items-center justify-between">
+        <!-- 2. TELAH DISETUJUI -->
+        <div class="bg-white p-4 sm:p-5 h-auto rounded-2xl shadow-sm border border-slate-100 border-l-4 border-l-emerald-500 flex items-center justify-between">
             <div>
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Telah Disetujui</p>
-                <h2 class="text-3xl font-bold text-gray-800 mt-1">{{ $totalDisetujui }}</h2>
+                <p class="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">Telah Disetujui</p>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-800 mt-0.5">{{ $totalDisetujui }}</h2>
             </div>
-            <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600 text-xl font-bold">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-base flex-shrink-0">
                 <i class="fa-solid fa-circle-check"></i>
             </div>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl shadow border-l-4 border-amber-500 flex items-center justify-between">
+        <!-- 3. PERLU REVISI -->
+        <div class="col-span-2 lg:col-span-1 bg-white p-4 sm:p-5 h-auto rounded-2xl shadow-sm border border-slate-100 border-l-4 border-l-amber-500 flex items-center justify-between">
             <div>
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Perlu Revisi</p>
-                <h2 class="text-3xl font-bold text-gray-800 mt-1">{{ $totalRevisi }}</h2>
+                <p class="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">Perlu Revisi</p>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-800 mt-0.5">{{ $totalRevisi }}</h2>
             </div>
-            <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600 text-xl font-bold">
+            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-base flex-shrink-0">
                 <i class="fa-solid fa-pen-ruler"></i>
             </div>
         </div>
+
     </div>
 
     <!-- FILTER & SEARCH PANEL -->

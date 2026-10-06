@@ -43,14 +43,15 @@ class OnboardingInstansiController extends Controller
 
         $user = auth()->user();
 
-        // Normalisasi koordinat
+        // Normalisasi koordinat & jenis instansi (menjamin hanya 'kantor' atau 'lapangan')
         $lat = round((float) $request->latitude, 7);
         $lng = round((float) $request->longitude, 7);
+        $jenisInstansi = ($request->jenis_instansi === 'lapangan') ? 'lapangan' : 'kantor';
 
         // Buat instansi baru
         $instansi = Instansi::create([
             'nama_instansi'     => $request->nama_instansi,
-            'jenis_instansi'    => $request->jenis_instansi,
+            'jenis_instansi'    => $jenisInstansi,
             'alamat'            => $request->alamat,
             'latitude'          => $lat,
             'longitude'         => $lng,

@@ -47,32 +47,87 @@
             <table class="w-full text-left border-collapse text-xs">
                 <thead class="bg-slate-50/90 text-slate-500 uppercase tracking-wider font-semibold text-[11px] border-b border-slate-100">
                     <tr>
-                        <th class="px-6 py-4 w-16 text-center">No</th>
-                        <th class="px-6 py-4">Nama Divisi</th>
-                        <th class="px-6 py-4">Deskripsi Tugas</th>
-                        <th class="px-6 py-4 text-center w-36">Aksi</th>
+                        <th class="px-5 py-4 w-12 text-center">No</th>
+                        <th class="px-5 py-4">Divisi & Kode</th>
+                        <th class="px-5 py-4">Kepala Divisi / Kasubag</th>
+                        <th class="px-5 py-4">Kuota Magang</th>
+                        <th class="px-5 py-4">Lokasi & Deskripsi</th>
+                        <th class="px-5 py-4 text-center w-28">Aksi</th>
                     </tr>
                 </thead>
 
                 <tbody class="divide-y divide-slate-100">
                     @forelse($divisis as $divisi)
                         <tr class="odd:bg-white even:bg-slate-50/40 hover:bg-blue-50/40 transition-colors duration-150">
-                            <td class="px-6 py-4 text-center font-bold text-slate-400">
+                            <td class="px-5 py-4 text-center font-bold text-slate-400">
                                 {{ $loop->iteration }}
                             </td>
 
-                            <td class="px-6 py-4">
-                                <span class="font-bold text-slate-800 text-sm block">
-                                    {{ $divisi->nama_divisi }}
-                                </span>
+                            <td class="px-5 py-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-slate-800 text-sm">
+                                        {{ $divisi->nama_divisi }}
+                                    </span>
+                                    @if($divisi->kode_divisi)
+                                        <span class="bg-blue-50 text-blue-700 text-[10px] font-mono font-bold px-2 py-0.5 rounded-md border border-blue-200/60 uppercase">
+                                            {{ $divisi->kode_divisi }}
+                                        </span>
+                                    @endif
+                                </div>
                             </td>
 
-                            <td class="px-6 py-4 text-slate-600">
-                                {{ $divisi->deskripsi ?? '-' }}
+                            <td class="px-5 py-4">
+                                @if($divisi->kepala_divisi)
+                                    <div class="font-semibold text-slate-800 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-user-tie text-blue-500 text-xs"></i>
+                                        <span>{{ $divisi->kepala_divisi }}</span>
+                                    </div>
+                                    @if($divisi->kepalaDivisi)
+                                        <div class="text-[11px] text-slate-400 mt-0.5">
+                                            {{ $divisi->kepalaDivisi->jabatan ?? ($divisi->kepalaDivisi->nip ? 'NIP. ' . $divisi->kepalaDivisi->nip : 'Pembimbing Instansi') }}
+                                        </div>
+                                    @endif
+                                @elseif($divisi->kepalaDivisi)
+                                    <div class="font-semibold text-slate-800 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-user-tie text-blue-500 text-xs"></i>
+                                        <span>{{ $divisi->kepalaDivisi->name }}</span>
+                                    </div>
+                                    <div class="text-[11px] text-slate-400 mt-0.5">
+                                        {{ $divisi->kepalaDivisi->jabatan ?? ($divisi->kepalaDivisi->nip ? 'NIP. ' . $divisi->kepalaDivisi->nip : 'Pembimbing Instansi') }}
+                                    </div>
+                                @else
+                                    <span class="text-[11px] text-slate-400 italic">Belum Ditentukan</span>
+                                @endif
                             </td>
 
-                            <td class="px-6 py-4 text-center">
-                                <div class="flex items-center justify-center gap-2">
+                            <td class="px-5 py-4">
+                                @php
+                                    $terisi = $divisi->pesertas->count();
+                                    $maks = $divisi->kuota_maksimal ?? 5;
+                                    $isPenuh = $terisi >= $maks;
+                                @endphp
+                                <div class="flex items-center gap-1.5">
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold {{ $isPenuh ? 'bg-rose-50 text-rose-700 border border-rose-200/60' : 'bg-emerald-50 text-emerald-700 border border-emerald-200/60' }}">
+                                        <i class="fa-solid fa-users text-[10px]"></i>
+                                        <span>{{ $terisi }} / {{ $maks }} Peserta</span>
+                                    </span>
+                                </div>
+                            </td>
+
+                            <td class="px-5 py-4">
+                                @if($divisi->lokasi_ruangan)
+                                    <div class="font-medium text-slate-700 flex items-center gap-1 text-[11px]">
+                                        <i class="fa-solid fa-location-dot text-slate-400"></i>
+                                        <span>{{ $divisi->lokasi_ruangan }}</span>
+                                    </div>
+                                @endif
+                                <div class="text-slate-500 text-[11px] {{ $divisi->lokasi_ruangan ? 'mt-0.5' : '' }} max-w-xs truncate" title="{{ $divisi->deskripsi }}">
+                                    {{ $divisi->deskripsi ?? '-' }}
+                                </div>
+                            </td>
+
+                            <td class="px-5 py-4 text-center">
+                                <div class="flex items-center justify-center gap-1.5">
                                     <a href="{{ route('divisi.edit', $divisi->id) }}"
                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded-xl transition"
                                        title="Edit Divisi">
@@ -95,7 +150,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="text-center py-12 text-slate-400">
+                            <td colspan="6" class="text-center py-12 text-slate-400">
                                 <i class="fa-solid fa-sitemap text-4xl mb-3 text-slate-300 block"></i>
                                 <span class="font-medium text-slate-500">Belum ada data divisi yang terdaftar.</span>
                             </td>

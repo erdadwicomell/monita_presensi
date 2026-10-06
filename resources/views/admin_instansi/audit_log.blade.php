@@ -112,28 +112,38 @@
         </form>
     </div>
 
-    <!-- TABLE CONTAINER -->
-    <div class="bg-white rounded-3xl shadow-sm overflow-hidden border border-slate-100">
+    <!-- TABLE CONTAINER (PREMIUM ENTERPRISE UI) -->
+    <div class="bg-white rounded-2xl shadow-md shadow-slate-100/80 border border-slate-100/50 p-4">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs">
-                <thead class="bg-slate-50/90 border-b border-slate-100 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-                    <tr>
-                        <th class="px-6 py-4">Waktu Insiden</th>
-                        <th class="px-6 py-4">Peserta / Pengguna</th>
-                        <th class="px-6 py-4">Kategori & Tingkat Risiko</th>
-                        <th class="px-6 py-4">Aktivitas / Detail Alasan</th>
-                        <th class="px-6 py-4">Koordinat GPS Terdeteksi</th>
-                        <th class="px-6 py-4">IP & User Agent Perangkat</th>
+                <!-- THEAD (HEADER TABEL RESMI) -->
+                <thead>
+                    <tr class="bg-slate-50/80 text-slate-500 font-semibold text-xs tracking-wider uppercase border-b border-slate-100">
+                        <th class="py-4 px-6">Waktu Insiden</th>
+                        <th class="py-4 px-6">Peserta / Pengguna</th>
+                        <th class="py-4 px-6">Kategori & Tingkat Risiko</th>
+                        <th class="py-4 px-6">Aktivitas / Detail Alasan</th>
+                        <th class="py-4 px-6">Koordinat GPS Terdeteksi</th>
+                        <th class="py-4 px-6">IP & User Agent Perangkat</th>
                     </tr>
                 </thead>
+
+                <!-- TBODY & TR (ZEBRA STRIPING + HOVER LEMBUT) -->
                 <tbody class="divide-y divide-slate-100">
                     @forelse($auditLogs as $log)
-                        <tr class="odd:bg-white even:bg-slate-50/40 hover:bg-blue-50/40 transition-colors duration-150">
-                            <td class="px-6 py-4 whitespace-nowrap">
+                        @php
+                            $lat = $log->latitude ?? ($log->payload_extra['latitude'] ?? ($log->payload_extra['lat'] ?? null));
+                            $lng = $log->longitude ?? ($log->payload_extra['longitude'] ?? ($log->payload_extra['lng'] ?? ($log->payload_extra['lon'] ?? null)));
+                        @endphp
+                        <tr class="odd:bg-white even:bg-slate-50/30 hover:bg-blue-50/40 transition-colors duration-150">
+                            <!-- Waktu Insiden -->
+                            <td class="py-4 px-6 whitespace-nowrap">
                                 <p class="font-bold text-slate-800">{{ $log->created_at->format('d M Y') }}</p>
                                 <p class="text-[11px] text-slate-400 font-mono mt-0.5">{{ $log->created_at->format('H:i:s') }} WIB</p>
                             </td>
-                            <td class="px-6 py-4">
+
+                            <!-- Peserta / Pengguna -->
+                            <td class="py-4 px-6">
                                 @if($log->user)
                                     <p class="font-bold text-slate-800">{{ $log->user->name }}</p>
                                     <p class="text-[11px] text-slate-400">{{ $log->user->email }}</p>
@@ -141,7 +151,9 @@
                                     <span class="text-slate-400 italic">Sistem / Otomatis</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
+
+                            <!-- Kategori & Tingkat Risiko -->
+                            <td class="py-4 px-6 whitespace-nowrap">
                                 <div class="space-y-1">
                                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold capitalize
                                         @if($log->tingkat_risiko === 'bahaya' || $log->tingkat_risiko === 'tinggi') bg-rose-50 text-rose-700 border border-rose-200/60
@@ -153,21 +165,27 @@
                                     <p class="text-[10px] text-slate-500 font-mono">{{ str_replace('_', ' ', $log->kategori) }}</p>
                                 </div>
                             </td>
-                            <td class="px-6 py-4">
+
+                            <!-- Aktivitas / Detail Alasan -->
+                            <td class="py-4 px-6">
                                 <p class="font-bold text-slate-800">{{ $log->judul }}</p>
                                 <p class="text-xs text-slate-600 mt-0.5 leading-relaxed">{{ $log->deskripsi }}</p>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-slate-600">
-                                @if($log->latitude && $log->longitude)
-                                    <a href="https://maps.google.com/?q={{ $log->latitude }},{{ $log->longitude }}" target="_blank" class="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-blue-700 px-2.5 py-1 rounded-xl transition text-xs font-mono">
-                                        <i class="fa-solid fa-location-dot text-rose-500"></i>
-                                        {{ $log->latitude }}, {{ $log->longitude }}
+
+                            <!-- Koordinat GPS Terdeteksi -->
+                            <td class="py-4 px-6 whitespace-nowrap text-xs font-mono text-slate-600">
+                                @if(!is_null($lat) && !is_null($lng))
+                                    <a href="https://maps.google.com/?q={{ $lat }},{{ $lng }}" target="_blank" class="inline-flex items-center gap-1.5 bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-600 px-3 py-1.5 rounded-xl border border-slate-200/60 transition text-xs font-mono group">
+                                        <i class="fa-solid fa-map-marker-alt text-red-500"></i>
+                                        <span class="group-hover:underline">{{ $lat }}, {{ $lng }}</span>
                                     </a>
                                 @else
-                                    <span class="text-slate-400">-</span>
+                                    <span class="text-slate-400 font-mono">-</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-xs text-slate-500 max-w-xs">
+
+                            <!-- IP & User Agent Perangkat -->
+                            <td class="py-4 px-6 text-xs text-slate-500 max-w-xs">
                                 <p class="font-mono font-bold text-slate-700">{{ $log->ip_address ?? '127.0.0.1' }}</p>
                                 <p class="text-[10px] text-slate-400 truncate mt-0.5" title="{{ $log->user_agent }}">{{ $log->user_agent }}</p>
                             </td>
@@ -185,7 +203,7 @@
         </div>
 
         @if($auditLogs->hasPages())
-            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50">
+            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50 mt-4 rounded-xl">
                 {{ $auditLogs->links() }}
             </div>
         @endif

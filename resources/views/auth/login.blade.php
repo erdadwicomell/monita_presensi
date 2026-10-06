@@ -79,7 +79,7 @@
             <!-- PASSWORD -->
             <div>
                 <div class="flex items-center justify-between mb-1.5">
-                    <label class="block text-xs font-bold text-slate-700">
+                    <label class="block text-xs font-bold text-slate-700" for="password">
                         Password <span class="text-rose-500">*</span>
                     </label>
                     @if (Route::has('password.request'))
@@ -89,15 +89,22 @@
                     @endif
                 </div>
                 <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 text-sm">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 text-sm pointer-events-none">
                         <i class="fa-solid fa-lock"></i>
                     </span>
                     <input type="password"
+                           id="password"
                            name="password"
                            required
                            autocomplete="current-password"
                            placeholder="Masukkan password Anda"
-                           class="w-full bg-white border border-slate-200 text-slate-800 placeholder:text-slate-400 text-xs rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition shadow-2xs">
+                           class="w-full bg-white border border-slate-200 text-slate-800 placeholder:text-slate-400 text-xs rounded-xl pl-10 pr-10 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition shadow-2xs">
+                    <button type="button"
+                            id="btnTogglePassword"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer transition p-1"
+                            aria-label="Tampilkan atau sembunyikan password">
+                        <i class="fa-solid fa-eye text-sm" id="iconPassword"></i>
+                    </button>
                 </div>
             </div>
 
@@ -131,6 +138,32 @@
         </div>
 
     </div>
+
+    <!-- SKRIP TOGGLE SHOW/HIDE PASSWORD -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const btn = document.getElementById('btnTogglePassword');
+        const input = document.getElementById('password');
+        const icon = document.getElementById('iconPassword');
+
+        if (btn && input && icon) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const isPassword = input.type === 'password';
+                
+                input.type = isPassword ? 'text' : 'password';
+
+                if (isPassword) {
+                    icon.classList.remove('fa-eye', 'text-slate-400');
+                    icon.classList.add('fa-eye-slash', 'text-blue-600');
+                } else {
+                    icon.classList.remove('fa-eye-slash', 'text-blue-600');
+                    icon.classList.add('fa-eye', 'text-slate-400');
+                }
+            });
+        }
+    });
+    </script>
 
 </body>
 </html>

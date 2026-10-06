@@ -88,11 +88,13 @@ class PembimbingLaporanController extends Controller
             'diverifikasi_pada' => now(),
         ]);
 
+        $tgl = \Carbon\Carbon::parse($laporan->tanggal)->format('Y-m-d');
+
         // Notifikasi ke peserta
         Notifikasi::kirim(
             $laporan->user_id,
             'Laporan Kegiatan Disetujui',
-            'Laporan kegiatan tanggal ' . $laporan->tanggal . ' telah disetujui oleh Pembimbing Instansi Anda (' . $pembimbing->name . ').',
+            "Laporan kegiatan Anda tanggal {$tgl} berstatus: Disetujui.",
             route('laporan.show', $laporan->id),
             'success'
         );
@@ -131,11 +133,13 @@ class PembimbingLaporanController extends Controller
             'diverifikasi_pada' => now(),
         ]);
 
+        $tgl = \Carbon\Carbon::parse($laporan->tanggal)->format('Y-m-d');
+
         // Notifikasi ke peserta
         Notifikasi::kirim(
             $laporan->user_id,
             'Laporan Perlu Revisi',
-            'Pembimbing Anda (' . $pembimbing->name . ') meminta revisi laporan tanggal ' . $laporan->tanggal . ': ' . $request->catatan_revisi,
+            "Laporan kegiatan Anda tanggal {$tgl} berstatus: Perlu Revisi.",
             route('laporan.edit', $laporan->id),
             'warning'
         );

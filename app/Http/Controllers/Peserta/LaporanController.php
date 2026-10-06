@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Peserta;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Laporan;
+use App\Models\Notifikasi;
+use Illuminate\Support\Facades\DB;
 
 class LaporanController extends Controller
 {
@@ -70,7 +72,7 @@ class LaporanController extends Controller
         $fileName = 'laporan_' . auth()->id() . '_' . time() . '.png';
         file_put_contents($uploadDir . '/' . $fileName, $imageBase64);
 
-        Laporan::create([
+        $laporan = Laporan::create([
             'user_id'           => auth()->id(),
             'kegiatan'          => $kegiatanText,
             'foto'              => 'uploads/' . $fileName,
@@ -81,6 +83,24 @@ class LaporanController extends Controller
             'diverifikasi_oleh' => null,
             'diverifikasi_pada' => null,
         ]);
+
+        // Notifikasi ke Pembimbing Instansi
+        $user = auth()->user();
+        $pembimbingIds = collect([$user->pembimbing_id])
+            ->merge(DB::table('pembimbing_peserta')->where('peserta_id', $user->id)->pluck('pembimbing_id'))
+            ->filter()
+            ->unique();
+
+        $pesanNotif = "{$user->name} telah mengunggah laporan kegiatan baru untuk tanggal " . \Carbon\Carbon::parse($laporan->tanggal)->format('Y-m-d') . ".";
+        foreach ($pembimbingIds as $pembimbingId) {
+            Notifikasi::kirim(
+                $pembimbingId,
+                'Laporan Kegiatan Baru',
+                $pesanNotif,
+                route('pembimbing.laporan.index'),
+                'info'
+            );
+        }
 
         return redirect()->route('laporan.index')
             ->with('success', 'Laporan kegiatan harian berhasil dikirim dan menunggu verifikasi pembimbing.');
@@ -183,6 +203,24 @@ class LaporanController extends Controller
             'diverifikasi_oleh' => null,
             'diverifikasi_pada' => null,
         ]);
+
+        // Notifikasi ke Pembimbing Instansi
+        $user = auth()->user();
+        $pembimbingIds = collect([$user->pembimbing_id])
+            ->merge(DB::table('pembimbing_peserta')->where('peserta_id', $user->id)->pluck('pembimbing_id'))
+            ->filter()
+            ->unique();
+
+        $pesanNotif = "{$user->name} telah mengunggah laporan kegiatan baru untuk tanggal " . \Carbon\Carbon::parse($laporan->tanggal)->format('Y-m-d') . ".";
+        foreach ($pembimbingIds as $pembimbingId) {
+            Notifikasi::kirim(
+                $pembimbingId,
+                'Laporan Kegiatan Baru',
+                $pesanNotif,
+                route('pembimbing.laporan.index'),
+                'info'
+            );
+        }
 
         return redirect()->route('laporan.index')
             ->with('success', 'Perbaikan laporan kegiatan berhasil dikirimkan kembali untuk diverifikasi.');

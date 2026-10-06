@@ -37,8 +37,9 @@
                         <th class="px-6 py-4 w-16 text-center">No</th>
                         <th class="px-6 py-4">Nama Peserta</th>
                         <th class="px-6 py-4">Email</th>
-                        <th class="px-6 py-4">NIM</th>
+                        <th class="px-6 py-4">NISN / NIM</th>
                         <th class="px-6 py-4">No HP</th>
+                        <th class="px-6 py-4">Pembimbing</th>
                         <th class="px-6 py-4">Penempatan Divisi / Teknisi</th>
                         <th class="px-6 py-4 text-center w-28">Aksi</th>
                     </tr>
@@ -70,6 +71,17 @@
                                     <i class="fa-solid fa-phone text-slate-400 text-[10px]"></i>
                                     {{ $peserta->no_hp ?? '-' }}
                                 </span>
+                            </td>
+
+                            <td class="px-6 py-4">
+                                @if($peserta->pembimbing)
+                                    <span class="inline-flex items-center gap-1.5 bg-purple-50 text-purple-700 border border-purple-200/60 px-3 py-1 rounded-full text-xs font-semibold">
+                                        <i class="fa-solid fa-chalkboard-user text-[10px]"></i>
+                                        <span>{{ $peserta->pembimbing->name }}</span>
+                                    </span>
+                                @else
+                                    <span class="text-slate-400 italic">-</span>
+                                @endif
                             </td>
 
                             <td class="px-6 py-4">
@@ -112,7 +124,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center py-12 text-slate-400">
+                            <td colspan="8" class="text-center py-12 text-slate-400">
                                 <i class="fa-solid fa-user-slash text-4xl mb-3 text-slate-300 block"></i>
                                 <span class="font-medium text-slate-500">Belum ada data peserta yang terdaftar.</span>
                             </td>

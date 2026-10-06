@@ -213,20 +213,23 @@
 
                 <!-- INFORMASI PENEMPATAN & TEKNISI / DIVISI -->
                 @if($isLapangan)
-                    <div class="p-3.5 bg-blue-50/70 border border-blue-200 rounded-2xl text-xs space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="bg-blue-600 text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                                Penempatan Lapangan
-                            </span>
-                            <span class="text-blue-700 font-semibold text-[11px]">
-                                <i class="fa-solid fa-route mr-1"></i> Pulang Bebas Radius
-                            </span>
+                    <div class="space-y-3">
+                        <!-- INFO CARD STATUS PENEMPATAN (PASTEL VERTICAL STYLE) -->
+                        <div class="bg-blue-50 border border-blue-100 rounded-xl p-3.5 sm:p-4">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                                <h3 class="text-sm font-bold text-blue-700">Penempatan Lapangan</h3>
+                            </div>
+                            <p class="text-xs text-blue-500 mt-1 flex items-center gap-1.5">
+                                <i class="fa-solid fa-route text-[11px]"></i>
+                                <span>Status: Pulang Bebas Radius</span>
+                            </p>
                         </div>
 
                         @if(!$absenMasuk)
                             <!-- DROPDOWN PILIH TEKNISI PENDAMPING SAAT DATANG -->
-                            <div>
-                                <label class="block font-bold text-gray-700 text-[11px] mb-1">
+                            <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1.5">
+                                <label class="block font-bold text-gray-700 text-xs">
                                     Pilih Teknisi Pendamping Hari Ini <span class="text-rose-500">*</span>
                                 </label>
                                 <select name="teknisi_id" required class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-xs font-semibold bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-2xs">
@@ -240,28 +243,33 @@
                             </div>
                         @else
                             <!-- INFORMASI TEKNISI TERKUNCI SAAT PULANG -->
-                            <div class="flex items-center justify-between text-gray-700 bg-white p-2.5 rounded-xl border border-blue-100 shadow-2xs">
-                                <span class="text-gray-500 font-medium">Teknisi Pendamping:</span>
-                                <span class="font-bold text-blue-700">
-                                    <i class="fa-solid fa-user-check mr-1 text-emerald-500"></i>
-                                    {{ $absenMasuk->teknisi->nama_teknisi ?? (auth()->user()->teknisi->nama_teknisi ?? 'Teknisi Lapangan') }}
-                                </span>
+                            <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-slate-500 font-medium">Teknisi Pendamping:</span>
+                                    <span class="font-bold text-blue-700 flex items-center gap-1">
+                                        <i class="fa-solid fa-user-check text-emerald-500 text-[11px]"></i>
+                                        {{ $absenMasuk->teknisi->nama_teknisi ?? (auth()->user()->teknisi->nama_teknisi ?? 'Teknisi Lapangan') }}
+                                    </span>
+                                </div>
+                                <p class="text-[10px] text-slate-400">
+                                    <i class="fa-solid fa-circle-info text-blue-500"></i> Teknisi terkunci otomatis dari presensi datang hari ini.
+                                </p>
                             </div>
-                            <p class="text-[10px] text-gray-400">
-                                <i class="fa-solid fa-circle-info text-blue-500"></i> Teknisi terkunci otomatis dari presensi datang hari ini.
-                            </p>
                         @endif
                     </div>
                 @else
-                    <!-- INFORMASI PENEMPATAN PERKANTORAN / PEMERINTAHAN -->
-                    <div class="p-3 bg-gray-50 border border-gray-200 rounded-2xl text-xs flex items-center justify-between">
-                        <div>
-                            <span class="text-[10px] font-bold uppercase text-gray-400 block">Divisi Penempatan</span>
-                            <span class="font-bold text-gray-800 text-xs">{{ auth()->user()->divisi->nama_divisi ?? 'Perkantoran' }}</span>
+                    <!-- INFORMASI PENEMPATAN PERKANTORAN / PEMERINTAHAN (SELARAS) -->
+                    <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 sm:p-4">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-slate-600"></span>
+                            <h3 class="text-sm font-bold text-slate-700">Penempatan Kantor / Pemerintahan</h3>
                         </div>
-                        <span class="text-[10px] bg-gray-200 text-gray-700 font-semibold px-2 py-1 rounded-full">
-                            Radius Kantor Wajib
-                        </span>
+                        <p class="text-xs text-slate-500 mt-1 flex items-center justify-between">
+                            <span>Divisi: {{ auth()->user()->divisi->nama_divisi ?? 'Perkantoran' }}</span>
+                            <span class="text-[10px] bg-slate-200 text-slate-700 font-semibold px-2 py-0.5 rounded-full">
+                                Radius Kantor Wajib
+                            </span>
+                        </p>
                     </div>
                 @endif
 

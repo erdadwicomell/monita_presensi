@@ -98,7 +98,7 @@ class AdminPerizinanController extends Controller
         \App\Models\Notifikasi::kirim(
             $perizinan->user_id,
             'Perizinan Disetujui',
-            'Perizinan jenis ' . str_replace('_', ' ', $perizinan->jenis_izin) . ' Anda untuk tanggal ' . $perizinan->tanggal . ' telah disetujui.',
+            'Pengajuan izin Anda telah Disetujui oleh Admin',
             route('perizinan.show', $perizinan->id_perizinan),
             'success'
         );
@@ -137,7 +137,7 @@ class AdminPerizinanController extends Controller
         \App\Models\Notifikasi::kirim(
             $perizinan->user_id,
             'Perizinan Ditolak',
-            'Perizinan jenis ' . str_replace('_', ' ', $perizinan->jenis_izin) . ' Anda untuk tanggal ' . $perizinan->tanggal . ' telah ditolak oleh Admin Instansi.',
+            'Pengajuan izin Anda telah Ditolak oleh Admin',
             route('perizinan.show', $perizinan->id_perizinan),
             'danger'
         );

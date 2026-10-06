@@ -8,11 +8,8 @@
 <div class="space-y-6">
 
     <!-- HEADER & ACTION BAR -->
-    <div class="bg-white rounded-3xl shadow-sm p-6 sm:p-8 border border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white rounded-3xl shadow-sm p-6 sm:p-8 border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <div class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2 border border-amber-100">
-                <i class="fa-solid fa-screwdriver-wrench"></i> Tim Lapangan
-            </div>
             <h1 class="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight">
                 Data Teknisi Lapangan
             </h1>
@@ -22,56 +19,73 @@
         </div>
 
         <a href="{{ route('teknisi.create') }}"
-           class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-5 py-3 rounded-2xl shadow-sm hover:shadow-md transition-all duration-150 transform hover:-translate-y-0.5 self-start md:self-auto cursor-pointer">
+           class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-sm shadow-blue-200 rounded-xl px-5 py-2.5 font-semibold text-sm transition-all transform hover:-translate-y-0.5 self-start sm:self-auto cursor-pointer">
             <i class="fa-solid fa-plus text-xs"></i>
             <span>Tambah Teknisi</span>
         </a>
     </div>
 
-    <!-- DATA TABLE CONTAINER -->
-    <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+    @if(session('success'))
+        <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2.5 shadow-xs">
+            <div class="w-7 h-7 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm flex-shrink-0">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div class="font-medium leading-relaxed">{{ session('success') }}</div>
+        </div>
+    @endif
+
+    <!-- DATA TABLE CONTAINER (PREMIUM ENTERPRISE UI) -->
+    <div class="bg-white rounded-2xl shadow-md shadow-slate-100/80 border border-slate-100/50 p-5">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs">
-                <thead class="bg-slate-50/90 text-slate-500 uppercase tracking-wider font-semibold text-[11px] border-b border-slate-100">
-                    <tr>
-                        <th class="px-6 py-4 w-16 text-center">No</th>
-                        <th class="px-6 py-4">Nama Teknisi</th>
-                        <th class="px-6 py-4">Email</th>
-                        <th class="px-6 py-4">Nomor HP / WhatsApp</th>
-                        <th class="px-6 py-4">NIK</th>
-                        <th class="px-6 py-4 text-center w-36">Aksi</th>
+                <!-- THEAD (HEADER TABEL RESMI) -->
+                <thead>
+                    <tr class="bg-slate-50/80 text-slate-500 font-semibold text-xs tracking-wider uppercase border-b border-slate-100">
+                        <th class="py-4 px-6 w-16 text-center">No</th>
+                        <th class="py-4 px-6">Nama Teknisi</th>
+                        <th class="py-4 px-6">Email</th>
+                        <th class="py-4 px-6">Nomor HP / WhatsApp</th>
+                        <th class="py-4 px-6">NIK</th>
+                        <th class="py-4 px-6 text-center w-36">Aksi</th>
                     </tr>
                 </thead>
 
+                <!-- TBODY & TR (ZEBRA STRIPING + HOVER LEMBUT) -->
                 <tbody class="divide-y divide-slate-100">
                     @forelse($teknisis as $item)
-                        <tr class="odd:bg-white even:bg-slate-50/40 hover:bg-blue-50/40 transition-colors duration-150">
-                            <td class="px-6 py-4 text-center font-bold text-slate-400">
+                        <tr class="odd:bg-white even:bg-slate-50/30 hover:bg-blue-50/40 transition-colors duration-150">
+                            <!-- NO -->
+                            <td class="py-4 px-6 text-center font-bold text-slate-400">
                                 {{ $loop->iteration }}
                             </td>
 
-                            <td class="px-6 py-4">
+                            <!-- NAMA TEKNISI -->
+                            <td class="py-4 px-6">
                                 <span class="font-bold text-slate-800 text-sm block">
                                     {{ $item->nama }}
                                 </span>
                             </td>
 
-                            <td class="px-6 py-4 text-slate-600 font-medium">
+                            <!-- EMAIL -->
+                            <td class="py-4 px-6 text-slate-600 font-medium">
                                 {{ $item->email }}
                             </td>
 
-                            <td class="px-6 py-4 text-slate-600">
+                            <!-- NOMOR HP -->
+                            <td class="py-4 px-6 text-slate-600">
                                 <span class="inline-flex items-center gap-1.5 text-slate-700 font-medium">
                                     <i class="fa-solid fa-phone text-slate-400 text-[10px]"></i>
                                     {{ $item->no_hp ?? '-' }}
                                 </span>
                             </td>
 
-                            <td class="px-6 py-4 font-mono text-slate-600">
+                            <!-- NIK -->
+                            <td class="py-4 px-6 font-mono text-slate-600">
                                 {{ $item->nik ?? '-' }}
                             </td>
 
-                            <td class="px-6 py-4 text-center">
+                            <!-- AKSI -->
+                            <td class="py-4 px-6 text-center">
                                 <div class="flex items-center justify-center gap-2">
                                     <a href="{{ route('teknisi.edit', $item->id) }}"
                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded-xl transition"

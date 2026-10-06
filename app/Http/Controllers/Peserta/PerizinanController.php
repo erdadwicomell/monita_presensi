@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Peserta;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Perizinan;
+use App\Models\Notifikasi;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -50,7 +52,7 @@ class PerizinanController extends Controller
             $bukti = $request->file('bukti')->store('perizinan', 'public');
         }
 
-        Perizinan::create([
+        $perizinan = Perizinan::create([
             'user_id'          => Auth::id(),
             'instansi_id'      => Auth::user()->instansi_id,
             'jenis_izin'       => $request->jenis_izin,
@@ -63,6 +65,23 @@ class PerizinanController extends Controller
             'disetujui_oleh'   => null,
             'disetujui_pada'   => null,
         ]);
+
+        // Notifikasi ke Admin Instansi
+        $user = Auth::user();
+        $admins = User::where('instansi_id', $user->instansi_id)
+            ->where('role', 'admin_instansi')
+            ->get();
+
+        $pesanNotif = "Pengajuan izin baru dari {$user->name} memerlukan evaluasi Anda.";
+        foreach ($admins as $admin) {
+            Notifikasi::kirim(
+                $admin->id,
+                'Pengajuan Izin Baru',
+                $pesanNotif,
+                route('admin.perizinan.index'),
+                'warning'
+            );
+        }
 
         return redirect()
             ->route('perizinan.index')

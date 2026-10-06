@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -32,13 +33,15 @@ class ProfileController extends Controller
         // Handle Upload Foto Profil
         if ($request->hasFile('foto_profil')) {
             // Hapus foto lama jika ada
-            if ($user->foto_profil && \Illuminate\Support\Facades\Storage::disk('public')->exists($user->foto_profil)) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->foto_profil);
+            if ($user->foto_profil && Storage::disk('public')->exists($user->foto_profil)) {
+                Storage::disk('public')->delete($user->foto_profil);
             }
 
             $path = $request->file('foto_profil')->store('avatars', 'public');
-            $validated['foto_profil'] = $path;
+            $user->foto_profil = $path;
         }
+
+        unset($validated['foto_profil']);
 
         $user->fill($validated);
 

@@ -45,14 +45,19 @@ class AdminRegisterController extends Controller
             'is_active'     => true,
         ]);
 
-        // Generate OTP Registrasi (otomatis terkirim ke email pengguna via SMTP)
-        Otp::generate($user->email, 'registrasi_admin', $user->id);
+        // Generate OTP Registrasi
+        $otp = Otp::generate($user->email, 'registrasi_admin', $user->id);
 
         // Simpan email di session untuk halaman OTP
         session([
             'otp_email' => $user->email,
             'otp_type'  => 'registrasi_admin',
         ]);
+
+        if (isset($otp->mail_sent) && !$otp->mail_sent) {
+            return redirect()->route('otp.verify.form')
+                ->with('info', "Koneksi email SMTP diblokir oleh firewall jaringan WiFi ini. Untuk keperluan demo/sidang, gunakan Kode OTP darurat: [ {$otp->otp_code} ].");
+        }
 
         return redirect()->route('otp.verify.form')
             ->with('info', "Kode OTP 6 digit telah dikirimkan ke alamat email {$user->email}. Silakan periksa Kotak Masuk atau folder Spam Anda.");

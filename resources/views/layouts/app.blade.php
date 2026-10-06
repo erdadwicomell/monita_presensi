@@ -198,6 +198,12 @@
                     <span class="font-medium">Peserta Bimbingan</span>
                 </a>
 
+                <a href="{{ route('pembimbing.presensi.index') }}"
+                   class="nav-link flex items-center gap-3 px-5 py-2.5 transition {{ request()->routeIs('pembimbing.presensi.*') ? 'nav-active' : '' }}">
+                    <i class="fa-solid fa-calendar-check text-sm w-4 text-center"></i>
+                    <span class="font-medium">Rekap Presensi Peserta</span>
+                </a>
+
                 <a href="{{ route('pembimbing.laporan.index') }}"
                    class="nav-link flex items-center gap-3 px-5 py-2.5 transition {{ request()->routeIs('pembimbing.laporan.*') ? 'nav-active' : '' }}">
                     <i class="fa-solid fa-book-bookmark text-sm w-4 text-center"></i>
@@ -295,17 +301,17 @@
                         </span>
                     </button>
 
-                    <!-- DROPDOWN MENU NOTIFIKASI -->
+                    <!-- DROPDOWN MENU NOTIFIKASI (RESPONSIVE MOBILE-FIRST) -->
                     <div id="notifDropdown"
-                         class="hidden absolute right-0 sm:right-auto sm:left-auto mt-3 w-[calc(100vw-2rem)] sm:w-88 max-w-sm bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden z-50 transition-all">
-                        <div class="p-4 bg-gray-50/80 border-b border-gray-100 flex items-center justify-between">
-                            <div class="flex items-center gap-2">
+                         class="hidden fixed inset-x-4 top-16 md:absolute md:right-0 md:left-auto md:w-96 md:top-full md:mt-3 bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden z-50 transition-all">
+                        <div class="p-4 bg-gray-50/80 border-b border-gray-100 flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-2 min-w-0">
                                 <h3 class="font-bold text-gray-800 text-xs sm:text-sm">Notifikasi</h3>
-                                <span id="notifHeaderCount" class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">0 Baru</span>
+                                <span id="notifHeaderCount" class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold flex-shrink-0">0 Baru</span>
                             </div>
                             <button type="button"
                                     id="btnMarkAllRead"
-                                    class="text-[11px] text-blue-600 hover:text-blue-800 font-semibold cursor-pointer">
+                                    class="text-[11px] text-blue-600 hover:text-blue-800 font-semibold cursor-pointer flex-shrink-0 transition">
                                 Tandai Dibaca
                             </button>
                         </div>

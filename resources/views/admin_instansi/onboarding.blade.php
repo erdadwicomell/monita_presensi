@@ -67,8 +67,7 @@
                     <select name="jenis_instansi"
                             required
                             class="w-full bg-white border border-slate-200 text-slate-800 text-xs rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition shadow-2xs cursor-pointer">
-                        <option value="kantor" {{ old('jenis_instansi') == 'kantor' ? 'selected' : '' }}>Perkantoran / Swasta</option>
-                        <option value="pemerintahan" {{ old('jenis_instansi') == 'pemerintahan' ? 'selected' : '' }}>Instansi Pemerintahan / BUMN</option>
+                        <option value="kantor" {{ old('jenis_instansi') == 'kantor' ? 'selected' : '' }}>Perkantoran / Pemerintahan</option>
                         <option value="lapangan" {{ old('jenis_instansi') == 'lapangan' ? 'selected' : '' }}>Instansi Lapangan / Teknisi</option>
                     </select>
                 </div>
